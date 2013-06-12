@@ -1,0 +1,47 @@
+{
+	"name": "fivefilters/term-extractor",
+	"type": "library",
+	"description": "Term Extractor - a PHP port of Topia's Term Extractor",
+	"keywords": ["term extraction","keyword extraction","term extractor","tagger","tagging","extraction","tag","text"],
+	"homepage": "http://code.fivefilters.org/term-extraction/",
+	"license": ["GPL-3.0+","ZPL-2.1"],
+	"authors": [
+	{
+		"name": "Keyvan Minoukadeh",
+		"email": "keyvan@keyvan.net",
+		"homepage": "http://keyvan.net",
+		"role": "Developer (ported Python code to PHP)"
+	},
+	{
+		"name": "Stephan Richter",
+		"homepage": "https://pypi.python.org/pypi/topia.termextract/",
+		"role": "Developer (original Python code)"
+	},
+	{
+		"name": "Russ Ferriday",
+		"homepage": "https://pypi.python.org/pypi/topia.termextract/",
+		"role": "Developer (original Python code)"
+	},
+	{
+		"name": "Zope Community",
+		"homepage": "https://pypi.python.org/pypi/topia.termextract/",
+		"role": "Developer (original Python code)"
+	},
+	{
+		"name": "Joseph Turian",
+		"homepage": "http://joseph.turian.com/",
+		"role": "Developer (updates to original Python code)"
+	}
+	],
+	"require": {
+		"php": ">=5.2"
+	},
+	"autoload": {
+		"psr-0": { 
+			"TermExtractor": "",
+			"Tagger": "",
+			"PermissiveFilter": "",
+			"DefaultFilter": ""
+		}
+	}
+}
