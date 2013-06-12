@@ -59,7 +59,7 @@ class Tagger {
 		}
 	}
 
-	private function correctDefaultNounTag($tagged_term) {
+	private function correctDefaultNounTag(&$tagged_term) {
 		// Determine whether a default noun is plural or singular.
 		list($term, $tag, $norm) = $tagged_term;
 		if ($tag == 'NND') {
@@ -72,7 +72,7 @@ class Tagger {
 		}
 	}
 
-	private function verifyProperNounAtSentenceStart($idx, $tagged_term, $tagged_terms) {
+	private function verifyProperNounAtSentenceStart($idx, &$tagged_term, &$tagged_terms) {
 		// Verify that noun at sentence start is truly proper.
 		list($term, $tag, $norm) = $tagged_term;
 		if (($tag == 'NNP' || $tag == 'NNPS') && ($idx == 0 || $tagged_terms[$idx-1][1] == '.')) {
@@ -87,7 +87,7 @@ class Tagger {
 		}
 	}
 
-	private function determineVerbAfterModal($idx, $tagged_term, $tagged_terms) {
+	private function determineVerbAfterModal($idx, &$tagged_term, &$tagged_terms) {
 		// Determine the verb after a modal verb to avoid accidental noun detection.
 		list($term, $tag, $norm) = $tagged_term;
 		if ($tag != 'MD') return;
@@ -105,7 +105,7 @@ class Tagger {
 		}
 	}
 
-	private function normalizePluralForms($idx, $tagged_term, $tagged_terms) {
+	private function normalizePluralForms($idx, &$tagged_term, &$tagged_terms) {
 		list($term, $tag, $norm) = $tagged_term;
 		if (($tag == 'NNS' || $tag == 'NNPS') && ($term == $norm)) {
 			// Plural form ends in "s"
@@ -170,7 +170,7 @@ class Tagger {
 		}
 		// Phase 2: Run through some rules to improve the term tagging and
 		// normalized form.
-		foreach ($tagged_terms as $idx => $tagged_term) {
+		foreach ($tagged_terms as $idx => &$tagged_term) {
 			// rules
 			$this->correctDefaultNounTag($tagged_term);
 			$this->verifyProperNounAtSentenceStart($idx, $tagged_term, $tagged_terms);
