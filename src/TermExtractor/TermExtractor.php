@@ -107,7 +107,7 @@ class TermExtractor {
 		$return = array();
 		foreach ($terms as $word => $occur) {
 			$word_count = count(preg_split('!\s+!', $word, null, PREG_SPLIT_NO_EMPTY));
-			if ($this->filter->accept($word, $occur, $word_count)) {
+			if ($this->filter->accept($word, $occur, $word_count, $terms)) {
 				$return[] = array($word, $occur, $word_count);
 			}
 		}

@@ -6,7 +6,7 @@ use TermExtractor\Filters\FilterInterface;
 
 class PermissiveFilter implements FilterInterface {
     
-	public function accept($word, $occur, $strength) {
+	public function accept($word, $occur, $strength, $allTerms) {
 		return true;
 	}
 }

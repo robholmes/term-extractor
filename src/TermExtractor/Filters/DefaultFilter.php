@@ -14,7 +14,7 @@ class DefaultFilter implements FilterInterface {
 		$this->noLimitStrength = $noLimitStrength;
 	}
 
-	public function accept($word, $occur, $strength) {
+	public function accept($word, $occur, $strength, $allTerms) {
 		return (($strength == 1 && $occur >= $this->singleStrengthMinOccur) ||
 						($strength >= $this->noLimitStrength));
 	}
