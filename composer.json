@@ -1,9 +1,9 @@
 {
-	"name": "fivefilters/term-extractor",
+	"name": "robholmes/term-extractor",
 	"type": "library",
 	"description": "Term Extractor - a PHP port of Topia's Term Extractor",
 	"keywords": ["term extraction","keyword extraction","term extractor","tagger","tagging","extraction","tag","text"],
-	"homepage": "http://code.fivefilters.org/term-extraction/",
+	"homepage": "http://github.com/robholmes/term-extractor",
 	"license": ["GPL-3.0+","ZPL-2.1"],
 	"authors": [
 	{
@@ -31,17 +31,17 @@
 		"name": "Joseph Turian",
 		"homepage": "http://joseph.turian.com/",
 		"role": "Developer (updates to original Python code)"
+	},
+	{
+		"name": "Rob Holmes",
+		"homepage": "http://robholmes.net/",
+		"role": "Developer (updates to PHP port for PHP 5.3+)"
 	}
 	],
 	"require": {
-		"php": ">=5.2"
+		"php": ">=5.3"
 	},
 	"autoload": {
-		"psr-0": { 
-			"TermExtractor": "",
-			"Tagger": "",
-			"PermissiveFilter": "",
-			"DefaultFilter": ""
-		}
+		"psr-0": { "TermExtractor": "src/" }
 	}
 }

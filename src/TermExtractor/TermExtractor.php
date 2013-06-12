@@ -19,16 +19,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once 'Tagger.php';
+namespace TermExtractor;
+
+use TermExtractor\Tagger;
+use TermExtractor\Filters\DefaultFilter;
+use TermExtractor\Filters\FilterInterface;
 
 class TermExtractor {
+
 	const SEARCH = 0;
 	const NOUN = 1;
-	
+
 	public $tagger;
 	public $filter;
-	
-	public function __construct($tagger=null, $filter=null) {
+
+	public function __construct(Tagger $tagger = null, FilterInterface $filter = null) {
 		if ($tagger === null) {
 			$this->tagger = new Tagger();
 			$this->tagger->initialize();
@@ -36,14 +41,13 @@ class TermExtractor {
 			$this->tagger = $tagger;
 		}
 		if ($filter === null) {
-			require_once 'DefaultFilter.php';
 			$this->filter = new DefaultFilter();
 		} else {
 			$this->filter = $filter;
 		}
 	}
-	
-	private function _add($term, $norm, &$multiterm, &$terms) {
+
+	private function _add($term, $norm, $multiterm, $terms) {
 		$multiterm[] = array($term, $norm);
 		// This was originally in the code, but we don't want unigram terms
 		// if we keep the multiterms -jpt			
@@ -51,8 +55,8 @@ class TermExtractor {
 		//$terms[$norm] += 1;
 		//echo "$norm: {$terms[$norm]} (_add())\n";		
 	}
-	
-	private function _keepterm($multiterm, &$terms) {
+
+	private function _keepterm($multiterm, $terms) {
 		$word = array();
 		foreach ($multiterm as $term_norm) {
 			$word[] = $term_norm[0];
@@ -62,7 +66,7 @@ class TermExtractor {
 		$terms[$word] += 1;
 		//echo "$word: {$terms[$word]} (_keepterm())\n";
 	}
-	
+
 	// $tags should be an array of tags produced by a Tagger instance
 	// if a string is given, we'll get tags by passing it to the Tagger instance associated with this object
 	public function extract($tags) {
@@ -81,15 +85,15 @@ class TermExtractor {
 				$state = self::NOUN;
 				$this->_add($term, $norm, $multiterm, $terms);
 			} elseif (($state == self::SEARCH) && ($tag == 'JJ') && ctype_upper($term[0])) { //TODO: test UTF8 for $term[0]?
-					$state = self::NOUN;
-					$this->_add($term, $norm, $multiterm, $terms);
+				$state = self::NOUN;
+				$this->_add($term, $norm, $multiterm, $terms);
 			} elseif (($state == self::NOUN) && (substr($tag, 0, 1) == 'N')) {
-					$this->_add($term, $norm, $multiterm, $terms);
+				$this->_add($term, $norm, $multiterm, $terms);
 			} elseif (($state == self::NOUN) && (substr($tag, 0, 1) != 'N')) {
-					$state = self::SEARCH;
-					if (count($multiterm) > 0) {
-						$this->_keepterm($multiterm, $terms);
-					}
+				$state = self::SEARCH;
+				if (count($multiterm) > 0) {
+					$this->_keepterm($multiterm, $terms);
+				}
 				$multiterm = array(); //[]
 			}
 		}

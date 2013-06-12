@@ -19,22 +19,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace TermExtractor;
+
 class Tagger {
+
 	//const TERM_SPEC = '!([^a-zA-Z]*)([a-zA-Z-\.]*[a-zA-Z])([^a-zA-Z]*[a-zA-Z]*)!';
 	// Modified by jpt - Turian: https://github.com/turian/topia.termextract
 	// regex [^\W\d_] = [a-zA-Z] with Unicode alphabetic character.
 	// See: http://stackoverflow.com/questions/2039140/python-re-how-do-i-match-an-alpha-character/2039476#2039476
 	const TERM_SPEC = '!([\W\d_]*)(([^\W\d_]?[-\.]?)*[^\W\d_])([\W\d_]*[^\W\d_]*)!u';
-	
+
 	private $dict;
 	private $language;
-	
-	public function __construct($language='english') {
+
+	public function __construct($language = 'english') {
 		$this->dict = array();
 		$this->language = $language;
 	}
-	
-	public function initialize($use_apc=false) {
+
+	public function initialize($use_apc = false) {
 		$use_apc = ($use_apc && function_exists('apc_fetch'));
 		//echo "Using APC: $use_apc.\n";
 		if ($use_apc) {
@@ -44,7 +47,7 @@ class Tagger {
 				return;
 			}
 		}
-		$fh = fopen(dirname(__FILE__).'/data/'.$this->language.'.txt', 'r');	
+		$fh = fopen(dirname(__FILE__).'/../../../data/'.$this->language.'.txt', 'r');	
 		while($line = fgets($fh)) {
 			$tags = array_slice(explode(' ', rtrim($line)), 0, 2);
 			$this->dict[$tags[0]] = $tags[1];
@@ -55,8 +58,8 @@ class Tagger {
 			//echo "Stored in APC!\n";
 		}
 	}
-	
-	private function correctDefaultNounTag(&$tagged_term) {
+
+	private function correctDefaultNounTag($tagged_term) {
 		// Determine whether a default noun is plural or singular.
 		list($term, $tag, $norm) = $tagged_term;
 		if ($tag == 'NND') {
@@ -68,8 +71,8 @@ class Tagger {
 			}
 		}
 	}
-	
-	private function verifyProperNounAtSentenceStart($idx, &$tagged_term, &$tagged_terms) {
+
+	private function verifyProperNounAtSentenceStart($idx, $tagged_term, $tagged_terms) {
 		// Verify that noun at sentence start is truly proper.
 		list($term, $tag, $norm) = $tagged_term;
 		if (($tag == 'NNP' || $tag == 'NNPS') && ($idx == 0 || $tagged_terms[$idx-1][1] == '.')) {
@@ -83,8 +86,8 @@ class Tagger {
 			}
 		}
 	}
-	
-	private function determineVerbAfterModal($idx, &$tagged_term, &$tagged_terms) {
+
+	private function determineVerbAfterModal($idx, $tagged_term, $tagged_terms) {
 		// Determine the verb after a modal verb to avoid accidental noun detection.
 		list($term, $tag, $norm) = $tagged_term;
 		if ($tag != 'MD') return;
@@ -101,8 +104,8 @@ class Tagger {
 			break;
 		}
 	}
-	
-	private function normalizePluralForms($idx, &$tagged_term, &$tagged_terms) {
+
+	private function normalizePluralForms($idx, $tagged_term, $tagged_terms) {
 		list($term, $tag, $norm) = $tagged_term;
 		if (($tag == 'NNS' || $tag == 'NNPS') && ($term == $norm)) {
 			// Plural form ends in "s"
@@ -125,7 +128,7 @@ class Tagger {
 			}
 		}
 	}
-	
+
 	public function tokenize($text) {
 		$terms = array();
 		$parts = preg_split('!\s!', $text);
@@ -147,7 +150,7 @@ class Tagger {
 		}
 		return $terms;
 	}
-	
+
 	// $terms should be an array produced by the tokenize() method
 	// if a string is provided, we'll pass it to tokenize() first
 	public function tag($terms) {
@@ -167,7 +170,7 @@ class Tagger {
 		}
 		// Phase 2: Run through some rules to improve the term tagging and
 		// normalized form.
-		foreach ($tagged_terms as $idx => &$tagged_term) {
+		foreach ($tagged_terms as $idx => $tagged_term) {
 			// rules
 			$this->correctDefaultNounTag($tagged_term);
 			$this->verifyProperNounAtSentenceStart($idx, $tagged_term, $tagged_terms);
