@@ -47,7 +47,7 @@ class Tagger {
 				return;
 			}
 		}
-		$fh = fopen(dirname(__FILE__).'/../../../data/'.$this->language.'.txt', 'r');	
+		$fh = fopen(dirname(__FILE__).'/../../data/'.$this->language.'.txt', 'r');	
 		while($line = fgets($fh)) {
 			$tags = array_slice(explode(' ', rtrim($line)), 0, 2);
 			$this->dict[$tags[0]] = $tags[1];
