@@ -47,7 +47,7 @@ class TermExtractor {
 		}
 	}
 
-	private function _add($term, $norm, $multiterm, $terms) {
+	private function _add($term, $norm, &$multiterm, &$terms) {
 		$multiterm[] = array($term, $norm);
 		// This was originally in the code, but we don't want unigram terms
 		// if we keep the multiterms -jpt			
@@ -56,7 +56,7 @@ class TermExtractor {
 		//echo "$norm: {$terms[$norm]} (_add())\n";		
 	}
 
-	private function _keepterm($multiterm, $terms) {
+	private function _keepterm($multiterm, &$terms) {
 		$word = array();
 		foreach ($multiterm as $term_norm) {
 			$word[] = $term_norm[0];
